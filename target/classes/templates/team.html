@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Team members</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/team.css}"/>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <script src="https://kit.fontawesome.com/423fa2e65b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="sidebar">
+<!--        <img src="https://i.ibb.co/L150TvG/logo-medical.jpg">-->
+        <img src="https://i.ibb.co/2Z2n6YF/Logo-App-Final.png" style="width: 230px;height: auto;margin:0 auto 0 auto;">
+        <nav>
+            <ul class="nav">
+                <li><a th:href="@{/welcome}">Home <i class="fas fa-book-open"></i></a></li>
+                <li><a th:href="@{/prescriptions/showTools}">Prescription tools <i class="fas fa-language"></i></a></li>
+                <li><a th:href="@{/download}">Downloads <i class="fab fa-android"></i></a></li>
+                <hr style="color: white">
+                <li><a th:href="@{/about}">About <i class="fas fa-info" style="width: 22.5px;float: right;font-size: 22px;"></i></a></li>
+                <li><a class="active" th:href="@{/team}">Credits <i class="fas fa-users"></i></a></li>
+                <li><a th:href="@{/contact}">Contact and support <i style="width: 28px"
+                                                                    class="fas fa-envelope-open"></i></a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="maincontaint">
+        <div class="wrapper-vertical">
+            <div class="titleBar">
+                <h2>Tradimed</h2>
+            </div>
+            <div class="main">
+                <div class="header ">
+                    <img src="https://i.ibb.co/Nr6vJqc/team.jpg"/>
+                    <h1>Credits</h1>
+                </div>
+                <div class="description">
+                    <div class="text">This <a th:href="@{/welcome}" style="color: dodgerblue"><b>Web</b></a> application and also <a
+                            th:href="@{/download}" style="color: dodgerblue"><b>Android</b></a> application are made
+                        in the Mohammdia School of Engineers by the engineers students Ali MHAMMEDI ALAOUI & Oussama SIWANE under the supervision of the Professor at the Mohammdia School of Engineers
+                        Karim BOUZOUBAA. The scientific content of the medical terms and their translation has been validated by Dr Adnane TAZI.
+                    </div>
+                </div>
+                <div class="members">
+                    <h1 class="table-title">Group Members</h1>
+                    <div class="table">
+                        <div class="table-row-cell">
+                            <div class="circular-landscape">
+                                <img class="round-image" th:src="@{/images/ali.jpg}" alt="">
+                            </div>
+                            <div class="table-cell">M'HAMMEDI ALAOUI Ali</div>
+                            <div class="table-cell"><a href="mailto:alimalaoui3@gmail.com"> alimalaoui3@gmail.com</a></div>
+                        </div>
+                        <div class="table-row-cell">
+                            <div class="circular-landscape">
+                                <img class="round-image" th:src="@{/images/oussama.JPG}" alt="">
+                            </div>
+                            <div class="table-cell">SIWANE Oussama</div>
+                            <div class="table-cell"><a href="mailto:ous.siw2@gmail.com">ous.siw2@gmail.com</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="flex">
+<!--                <div class="flex-column">-->
+<!--                    <a th:href="@{/team}"><span>About us</span></a>-->
+<!--                </div>-->
+                <div class="flex-column">
+                    All Rights Reserved ©
+                </div>
+<!--                <div class="flex-column">-->
+<!--                    <a th:href="@{/contact}"><span>Contact us</span></a>-->
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

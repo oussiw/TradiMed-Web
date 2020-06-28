@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <!--    <meta charset="utf-8">-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Prescription tools</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/analyser.css}"/>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/static.css}"/>
+    <script src="https://kit.fontawesome.com/423fa2e65b.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/earlyaccess/droidarabicnaskh.css">
+
+</head>
+<body onload="thisreset()">
+<div class="wrapper">
+    <div class="sidebar">
+        <!--        <img src="https://i.ibb.co/L150TvG/logo-medical.jpg">-->
+        <img src="https://i.ibb.co/2Z2n6YF/Logo-App-Final.png" style="width: 230px;height: auto;margin:0 auto 0 auto;">
+        <nav>
+            <ul class="nav">
+                <li><a th:href="@{/welcome}">Home <i class="fas fa-book-open"></i></a></li>
+                <li><a class="active" th:href="@{/prescriptions/showTools}">Prescription tools <i
+                        class="fas fa-language"></i></a>
+                </li>
+                <li><a th:href="@{/download}">Downloads <i class="fab fa-android"></i></a></li>
+                <hr style="color: white">
+                <li><a th:href="@{/about}">About <i class="fas fa-info" style="width: 22.5px;float: right;font-size: 22px;"></i></a></li>
+                <li><a th:href="@{/team}">Credits <i class="fas fa-users"></i></a></li>
+                <li><a th:href="@{/contact}">Contact and support <i style="width: 28px"
+                                                                    class="fas fa-envelope-open"></i></a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="maincontaint">
+        <div class="wrapper-vertical">
+            <div class="titleBar">
+                <h2>Tradimed</h2>
+            </div>
+            <div class="main">
+                <div class="header ">
+                    <div style="position: relative">
+                        <img src="https://i.ibb.co/KVjtT0w/notes.jpg"/>
+<!--                        <img th:src="@{images/notes.jpg}"/>-->
+                        <h1 style="position: absolute;margin-top: 55px">Prescription tools</h1>
+                    </div>
+                </div>
+                <div class="description">
+                    <div class="text">
+                        Write your text in the <b>Original text</b> area below and click in <b>Translate</b>
+                        to get the result:
+                    </div>
+                </div>
+
+                <form th:action="@{/prescriptions/translate}" th:object="${prescription}" method="post"
+                      class="form" id="form" name="form">
+                    <div class="input">
+                        <div class="row">
+                            <div class="col-25">
+                                <label for="originalText">Original text</label>
+                                <input type="file" id="file" style="display:none;"/>
+                                <button id="button_upload" name="button" type="button" value="Upload"
+                                        onclick="thisFileUpload();"><i
+                                        class="fas fa-upload"></i>Upload
+                                </button>
+
+                            </div>
+                            <div class="col-75">
+                                <textarea id="originalText" th:field="*{originalText}"
+                                          placeholder="Write something or upload your text..."
+                                          style="height:200px" spellcheck="false" oninput="changeHandler()"></textarea>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="chargement">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <button id="button_submit" name="button" type="button"
+                                    onclick="thisSubmit()">Translate
+                            </button>
+                            <div class="sk-fading-circle">
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-25">
+                                <label for="lv">Propositions of Spell Checking</label>
+                            </div>
+
+                            <div class="alert checked" id="alert1">
+                                <span class="closebtn">&times;</span>
+                                <strong>Checked!</strong>
+                            </div>
+                            <div class="col-75">
+                                <textarea id="lv" th:field="*{lvText}" placeholder="Propositions..."
+                                          spellcheck="false"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="output">
+                        <div class="row">
+                            <div class="col-25">
+                                <label for="correctedText">Referential text</label>
+                            </div>
+                            <div class="col-75">
+
+                                <textarea id="correctedText" th:field="*{correctedText}" placeholder="Referentiel text.."
+                                          style="height:200px" spellcheck="false"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-25" id="arabicTitle">
+                                <label for="translatedText" style="direction: rtl"
+                                       onkeyup="setWordOrder(event)">الوصفة</label>
+                            </div>
+
+                            <div class="col-75">
+                                <div class="alert success">
+                                    <span class="closebtn">&times;</span>
+                                    <strong>Copied!</strong>
+                                </div>
+                                <textarea id="translatedText" style="direction: rtl;height:200px;font-size: 20px"
+                                          onkeyup="setWordOrder(event)" th:field="*{translatedText}"
+                                          placeholder="النص المترجم..." spellcheck="false"></textarea>
+                            </div>
+
+
+                        </div>
+                        <button id="button_copy" name="button_copy" type="button"
+                                onclick="saveTextAsFile();" download><i
+                                class="fas fa-save"></i>Save text as File
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="footer">
+            <div class="flex">
+<!--                <div class="flex-column">-->
+<!--                    <a th:href="@{/team}"><span>About us</span></a>-->
+<!--                </div>-->
+                <div class="flex-column">
+                    All Rights Reserved ©
+                </div>
+<!--                <div class="flex-column">-->
+<!--                    <a th:href="@{/contact}"><span>Contact us</span></a>-->
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+
+    const URL = "http://arabic.emi.ac.ma:8080/tradimed"
+    //const URL ="http://8675acfcd0a9.ngrok.io"
+    //const URL="http://localhost:8081"
+
+    function setWordOrder(e) {
+        if (e.key === " ") {
+            const textbox = document.getElementById("originalText");
+            textbox.value += "\u200F";
+        }
+    }
+
+    $(document).ready(function () {
+        localStorage.clear();
+        //localStorage.removeItem("name of localStorage variable you want to remove");
+    });
+
+
+    async function thisSubmit() {
+        //document.getElementById("submit_translate").click();
+        //translation
+        document.getElementsByClassName("chargement")[0].style.display="unset"
+        const trans = URL + "/restApi/translate"
+        let prescription = {
+            originalText: document.getElementById("originalText").value,
+            correctedText: '',
+            lvText: '',
+            translatedText: '',
+        }
+        //console.log(document.getElementById("originalText").value)
+        let responseTrans = await fetch(trans, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            body: JSON.stringify(prescription)
+        })
+        let resultTrans = await responseTrans.json()
+        document.getElementById("translatedText").value = resultTrans.translatedText
+
+        //correction
+        const corr = URL + "/restApi/correct"
+
+        let responseCorr = await fetch(corr, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            body: JSON.stringify(prescription)
+        })
+        let resultCorr = await responseCorr.json()
+        document.getElementById("correctedText").value = resultCorr.correctedText
+        if(resultTrans.length!==0 && resultCorr.length!==0){
+            document.getElementsByClassName("chargement")[0].style.display="none"
+        }
+    }
+
+    function thisGenerate() {
+        console.log("pdf")
+
+        const doc = new jsPDF();
+        const texte = document.getElementById("translatedText").value
+        // let AmiriRegular=environment.font
+        // doc.addFileToVFS("Amiri-regular.ttf",AmiriRegular)
+        //doc.addFont("Droid Arabic Naskh","Naskh")
+        doc.setFontSize(20)
+        const texte2 = doc.processArabic(texte, true);
+        doc.text(texte2, 15, 15, {lan: 'ar'})
+        doc.save("Arabic_Prescription.pdf")
+    }
+
+
+    ////////////upload file///////////////////
+    function thisFileUpload() {
+        document.getElementById("file").click();
+        this.uploadText()
+
+    }
+
+    function uploadText() {
+        document.getElementById("file").addEventListener("change", getFile)
+    }
+
+    function getFile(event) {
+        const input = event.target
+        if ('files' in input && input.files.length > 0) {
+            placeFileContent(
+                document.getElementById('originalText'),
+                input.files[0])
+        }
+    }
+
+    function placeFileContent(target, file) {
+        readFileContent(file).then(content => {
+            target.value = content
+        }).catch(error => console.log(error))
+    }
+
+    function readFileContent(file) {
+        const reader = new FileReader()
+        return new Promise((resolve, reject) => {
+            reader.onload = event => resolve(event.target.result)
+            reader.onerror = error => reject(error)
+            reader.readAsText(file)
+        })
+    }
+
+
+    /////////////////////Copy To clipBoard////////////////////
+    function copyText() {
+        /* Get the text field */
+        const copyText = document.getElementById("translatedText");
+
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+
+        /* Alert the copied text */
+        //alert("Text copied: تم نسخ النص ");
+        const alert = document.getElementsByClassName("alert");
+        alert[1].style.display = "block"
+        setTimeout(function () {
+            alert[1].style.opacity = "1";
+        }, 100)
+
+
+    }
+
+    //close alert success
+    const close = document.getElementsByClassName("closebtn");
+
+    for (i = 0; i < close.length; i++) {
+        close[i].onclick = function () {
+            const div = this.parentElement;
+            div.style.opacity = "0";
+            setTimeout(function () {
+                div.style.display = "none";
+            }, 600);
+
+        }
+    }
+
+
+    /////////////sumbit LV/////////
+    function deleteOcc(liste){
+        for(let k=0;k<liste.length;k++){
+            for(let i=0; i<liste.length; i++){
+                const e = liste[i];
+                for(let j=0; j<liste.length; j++){
+                    if(j!==i){
+                        if(e.includes(liste[j])){
+                            liste.splice(j,1)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    async function thissumbitLV() {
+        document.getElementsByClassName("sk-fading-circle")[0].style.display="unset"
+        const newAction = URL + "/restApi/lv"
+        let prescription = {
+            originalText: document.getElementById("originalText").value,
+            correctedText: '',
+            lvText: '',
+            translatedText: ''
+        }
+        //console.log(prescription)
+        let response = await fetch(newAction, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+            },
+            body: JSON.stringify(prescription)
+        })
+        let result = await response.json()
+        //console.log("result="+result.lvText)
+        let textlv = result.lvText
+        let json = JSON.parse(textlv)
+        //console.log(json)
+        let text = ""
+        let keys = []
+        for (let key in json) {
+            keys.push(key)
+            if (Number.isInteger(parseInt(key)) || key === "") {
+                continue
+            }
+            if (json.hasOwnProperty(key)) {
+                text = text + key + " --> "
+                let array = json[key].slice(1, json[key].length - 1)
+                let prop = array.split(",")
+                //console.log(prop)
+                deleteOcc(prop)
+
+                for (let index in prop) {
+                    text = text + " " + prop[index]
+                }
+                text = text + "\n"
+            }
+
+        }
+
+        document.getElementById("lv").value = text
+        if(text===""){
+            document.getElementsByClassName("alert")[0].style.backgroundColor="#4CAF50"
+        }else{
+            document.getElementsByClassName("alert")[0].style.backgroundColor="#ff9800"
+        }
+        const alert = document.getElementsByClassName("alert");
+        alert[0].style.display = "block"
+        setTimeout(function () {
+            alert[0].style.opacity = "1";
+        }, 100)
+        if(textlv.length!==0){
+            document.getElementsByClassName("sk-fading-circle")[0].style.display="none"
+        }
+
+    }
+
+    function changeHandler() {
+        document.getElementById("correctedText").value=""
+        document.getElementById("translatedText").value=""
+
+        if (document.getElementById("originalText").value !== "") {
+            thissumbitLV()
+        }
+    }
+
+
+    function thisreset() {
+
+        document.getElementById("form").reset()
+        const textareas = document.getElementsByTagName("textarea")
+        for (i = 0; i < textareas.length; i++) {
+            textareas[i].value = ""
+        }
+    }
+
+    /////////////////////////////////////////////////Save file as/////////////////////////////////////////////////////
+
+
+
+    function saveTextAsFile()
+    {
+        var textAr = document.getElementById("translatedText").value
+        var textFr = document.getElementById("correctedText").value
+        var textToWrite ="French presricption :\n"+textFr +"\n ------------------------\n الوصفة\n"+textAr
+        var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+        // var textFileAsBlob = new Blob([textToWrite], {type:'text/vnd.ms-word;charset=utf-8'});
+        var fileNameToSaveAs = "Prescription"
+
+        var downloadLink = document.createElement("a");
+
+        downloadLink.download = fileNameToSaveAs;
+        downloadLink.innerHTML = "Download File";
+        if (window.webkitURL != null)
+        {
+            // Chrome allows the link to be clicked
+            // without actually adding it to the DOM.
+            downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+        }
+        else
+        {
+            // Firefox requires the link to be added to the DOM
+            // before it can be clicked.
+            downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+            downloadLink.onclick = destroyClickedElement;
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+        }
+
+        downloadLink.click();
+    }
+
+    function destroyClickedElement(event)
+    {
+        document.body.removeChild(event.target);
+    }
+
+
+
+</script>
+</html>
